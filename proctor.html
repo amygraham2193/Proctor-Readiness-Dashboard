@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Proctor Status</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    button { font-size: 20px; padding: 10px 20px; margin: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Proctor Room Status</h1>
+  <label for="room">Room ID:</label>
+  <input type="text" id="room" placeholder="Enter Room ID" />
+  <br><br>
+  <button onclick="setStatus(true)">✅ Ready</button>
+  <button onclick="setStatus(false)">❌ Not Ready</button>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function setStatus(isReady) {
+      const room = document.getElementById('room').value;
+      if (!room) {
+        alert("Please enter a Room ID");
+        return;
+      }
+      db.ref('rooms/' + room).set({
+        ready: isReady,
+        timestamp: new Date().toISOString()
+      });
+    }
+  </script>
+</body>
+</html>
